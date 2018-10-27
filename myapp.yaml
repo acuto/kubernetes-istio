@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp
+  labels:
+    app: myapp
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    name: http
+  selector:
+    app: myapp
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: myapp-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: myapp
+        version: v1
+    spec:
+      containers:
+      - name: myapp
+        image: myapp:v1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: myapp-v2
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: myapp
+        version: v2
+    spec:
+      containers:
+      - name: myapp
+        image: myapp:v2
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
